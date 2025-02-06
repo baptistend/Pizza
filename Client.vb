@@ -9,7 +9,15 @@
         Confirmation
     End Enum
 
+    Private Enum EtatSelectionPizza
+        AjoutPizza
+        PanierVide
+        PanierRempli
+    End Enum
+
     Private EtatActuel As EtatCommande
+
+    Private EtatSelectionPizzaActuel As EtatSelectionPizza
 
     Private lblTitle As Label
     Private lstPizzerias As ListBox
@@ -91,16 +99,16 @@
         ' Bouton récupération
         btnRecup = New Button()
         btnRecup.Text = "Valider la commande"
-        btnRecup.Location = New Drawing.Point(10, 300)
+        btnRecup.Location = New Drawing.Point(300, 300)
         btnRecup.Enabled = False ' Désactivé par défaut
-        AddHandler btnRecup.Click, AddressOf Me.Recup_Click
+        AddHandler btnRecup.Click, AddressOf Me.Valid_Click
         Me.Controls.Add(btnRecup)
 
         ' Bouton retour
         btnRetour = New Button()
         btnRetour.Text = "Retour"
         btnRetour.Location = New Drawing.Point(180, 300)
-        AddHandler btnRetour.Click, AddressOf Me.Recup_Click
+        AddHandler btnRetour.Click, AddressOf Me.Retour_Click
         Me.Controls.Add(btnRetour)
 
         ' Initialisation de l'état
@@ -150,6 +158,7 @@
                 btnSupprimer.Visible = True
                 btnRecup.Visible = panier.Count > 0
                 btnRetour.Visible = True
+                EtatSelectionPizzaActuel = EtatSelectionPizza.PanierVide
 
             Case EtatCommande.Confirmation
                 lblTitle.Text = "Commande confirmée !"
@@ -177,6 +186,7 @@
             panier.Add(lstPizzas.SelectedItem.ToString())
             lstPanier.Items.Add(lstPizzas.SelectedItem.ToString())
             btnRecup.Enabled = True
+            EtatSelectionPizzaActuel = EtatSelectionPizza.PanierRempli
         End If
     End Sub
 
@@ -185,12 +195,35 @@
         If lstPanier.SelectedItem IsNot Nothing Then
             panier.Remove(lstPanier.SelectedItem.ToString())
             lstPanier.Items.Remove(lstPanier.SelectedItem)
-            btnRecup.Enabled = panier.Count > 0
+
+            If panier.Count > 0 Then
+                btnRecup.Enabled = True
+            Else
+                EtatSelectionPizzaActuel = EtatSelectionPizza.PanierVide
+                btnRecup.Enabled = False
+            End If
         End If
     End Sub
 
     ' Validation de la commande
-    Private Sub Recup_Click(sender As Object, e As EventArgs)
-        ChangerEtat(EtatCommande.Confirmation)
+    Private Sub Valid_Click(sender As Object, e As EventArgs)
+        If lstPizzas.SelectedItem IsNot Nothing Then
+            MessageBox.Show("Vous avez sélectionné : " & lstPizzas.SelectedItem.ToString, "Confirmation")
+            ChangerEtat(EtatCommande.Confirmation)
+        Else
+            MessageBox.Show("Veuillez sélectionner une pizza.", "Erreur")
+        End If
     End Sub
+
+    ' Bouton retour
+    ' Retour à l'étape précédente
+    Private Sub Retour_Click(sender As Object, e As EventArgs)
+        Select Case EtatActuel
+            Case EtatCommande.SelectionPizzeria
+                ChangerEtat(EtatCommande.SelectionModeLivraison)
+            Case EtatCommande.SelectionPizza
+                ChangerEtat(EtatCommande.SelectionPizzeria)
+        End Select
+    End Sub
+
 End Class
