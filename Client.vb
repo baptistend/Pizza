@@ -14,15 +14,21 @@
     Private lblTitle As Label
     Private lstPizzerias As ListBox
     Private lstPizzas As ListBox
+    Private lstPanier As ListBox
+    Private btnAjouter As Button
+    Private btnSupprimer As Button
     Private btnRecup As Button
     Private btnEmporter As Button
     Private btnLivraison As Button
     Private btnValiderPizzeria As Button
+    Private btnRetour As Button
+
+    Private panier As New List(Of String)
 
     Private Sub Client_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Configuration du formulaire
         Me.Text = "Client - Sélection de Pizza"
-        Me.Size = New Drawing.Size(300, 350)
+        Me.Size = New Drawing.Size(350, 400)
         Me.StartPosition = FormStartPosition.CenterScreen
 
         ' Label
@@ -60,15 +66,42 @@
         lstPizzas = New ListBox()
         lstPizzas.Items.AddRange(New String() {"Margherita", "Pepperoni", "4 Fromages", "Végétarienne", "Hawaïenne"})
         lstPizzas.Location = New Drawing.Point(10, 80)
-        lstPizzas.Size = New Drawing.Size(260, 150)
+        lstPizzas.Size = New Drawing.Size(150, 100)
         Me.Controls.Add(lstPizzas)
+
+        ' Liste du panier
+        lstPanier = New ListBox()
+        lstPanier.Location = New Drawing.Point(180, 80)
+        lstPanier.Size = New Drawing.Size(150, 100)
+        Me.Controls.Add(lstPanier)
+
+        ' Boutons pour gérer le panier
+        btnAjouter = New Button()
+        btnAjouter.Text = "Ajouter"
+        btnAjouter.Location = New Drawing.Point(10, 190)
+        AddHandler btnAjouter.Click, AddressOf Me.Ajouter_Pizza
+        Me.Controls.Add(btnAjouter)
+
+        btnSupprimer = New Button()
+        btnSupprimer.Text = "Supprimer"
+        btnSupprimer.Location = New Drawing.Point(180, 190)
+        AddHandler btnSupprimer.Click, AddressOf Me.Supprimer_Pizza
+        Me.Controls.Add(btnSupprimer)
 
         ' Bouton récupération
         btnRecup = New Button()
-        btnRecup.Text = "Sélectionner"
-        btnRecup.Location = New Drawing.Point(10, 240)
+        btnRecup.Text = "Valider la commande"
+        btnRecup.Location = New Drawing.Point(10, 300)
+        btnRecup.Enabled = False ' Désactivé par défaut
         AddHandler btnRecup.Click, AddressOf Me.Recup_Click
         Me.Controls.Add(btnRecup)
+
+        ' Bouton retour
+        btnRetour = New Button()
+        btnRetour.Text = "Retour"
+        btnRetour.Location = New Drawing.Point(180, 300)
+        AddHandler btnRetour.Click, AddressOf Me.Recup_Click
+        Me.Controls.Add(btnRetour)
 
         ' Initialisation de l'état
         ChangerEtat(EtatCommande.SelectionModeLivraison)
@@ -86,7 +119,11 @@
                 lstPizzerias.Visible = False
                 btnValiderPizzeria.Visible = False
                 lstPizzas.Visible = False
+                lstPanier.Visible = False
+                btnAjouter.Visible = False
+                btnSupprimer.Visible = False
                 btnRecup.Visible = False
+                btnRetour.Visible = False
 
             Case EtatCommande.SelectionPizzeria
                 lblTitle.Text = "Sélectionnez une pizzeria :"
@@ -95,25 +132,27 @@
                 lstPizzerias.Visible = True
                 btnValiderPizzeria.Visible = True
                 lstPizzas.Visible = False
+                lstPanier.Visible = False
+                btnAjouter.Visible = False
+                btnSupprimer.Visible = False
                 btnRecup.Visible = False
+                btnRetour.Visible = True
 
             Case EtatCommande.SelectionPizza
-                lblTitle.Text = "Sélectionnez votre pizza :"
+                lblTitle.Text = "Ajoutez des pizzas à votre panier :"
                 btnEmporter.Visible = False
                 btnLivraison.Visible = False
                 lstPizzerias.Visible = False
                 btnValiderPizzeria.Visible = False
                 lstPizzas.Visible = True
-                btnRecup.Visible = True
+                lstPanier.Visible = True
+                btnAjouter.Visible = True
+                btnSupprimer.Visible = True
+                btnRecup.Visible = panier.Count > 0
+                btnRetour.Visible = True
 
             Case EtatCommande.Confirmation
                 lblTitle.Text = "Commande confirmée !"
-                btnEmporter.Visible = False
-                btnLivraison.Visible = False
-                lstPizzerias.Visible = False
-                btnValiderPizzeria.Visible = False
-                lstPizzas.Visible = False
-                btnRecup.Visible = False
                 MessageBox.Show("Merci pour votre commande !", "Confirmation")
         End Select
     End Sub
@@ -132,13 +171,26 @@
         End If
     End Sub
 
-    ' Sélection de la pizza
-    Private Sub Recup_Click(sender As Object, e As EventArgs)
+    ' Ajouter une pizza au panier
+    Private Sub Ajouter_Pizza(sender As Object, e As EventArgs)
         If lstPizzas.SelectedItem IsNot Nothing Then
-            MessageBox.Show("Vous avez sélectionné : " & lstPizzas.SelectedItem.ToString, "Confirmation")
-            ChangerEtat(EtatCommande.Confirmation)
-        Else
-            MessageBox.Show("Veuillez sélectionner une pizza.", "Erreur")
+            panier.Add(lstPizzas.SelectedItem.ToString())
+            lstPanier.Items.Add(lstPizzas.SelectedItem.ToString())
+            btnRecup.Enabled = True
         End If
+    End Sub
+
+    ' Supprimer une pizza du panier
+    Private Sub Supprimer_Pizza(sender As Object, e As EventArgs)
+        If lstPanier.SelectedItem IsNot Nothing Then
+            panier.Remove(lstPanier.SelectedItem.ToString())
+            lstPanier.Items.Remove(lstPanier.SelectedItem)
+            btnRecup.Enabled = panier.Count > 0
+        End If
+    End Sub
+
+    ' Validation de la commande
+    Private Sub Recup_Click(sender As Object, e As EventArgs)
+        ChangerEtat(EtatCommande.Confirmation)
     End Sub
 End Class
