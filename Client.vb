@@ -45,47 +45,29 @@ Public Class Client
 
         Select Case EtatActuel
             Case EtatCommande.SelectionModeLivraison
-                LabelHeader.Text = "Choisissez le mode de livraison :"
-                SelectionModeLivraisonLayout.Visible = True
-                SelectionPizzeriaLayout.Visible = False
-                SelectionPizzaLayout.Visible = False
-
-                btnRetour.Visible = False
+                RendSelectionModeLivraison()
 
             Case EtatCommande.SelectionPizzeria
-                LabelHeader.Text = "Sélectionnez une pizzeria :"
-                SelectionModeLivraisonLayout.Visible = False
-                SelectionPizzeriaLayout.Visible = True
-                SelectionPizzaLayout.Visible = False
-
-
-                btnRetour.Visible = True
+                RendSelectionPizzeria()
 
             Case EtatCommande.SelectionPizza
-                LabelHeader.Text = "Ajoutez des pizzas à votre panier :"
-                SelectionModeLivraisonLayout.Visible = False
-                SelectionPizzeriaLayout.Visible = False
-                SelectionPizzaLayout.Visible = True
-
-
-                btnValiderCommande.Visible = CommandeActuelle.getCommandSize > 0
-                btnRetour.Visible = True
-                EtatSelectionPizzaActuel = EtatSelectionPizza.PanierVide
+                RendSelectionPizza()
 
             Case EtatCommande.Confirmation
-                LabelHeader.Text = "Commande confirmée !"
-                Dim result As DialogResult = MessageBox.Show("Merci pour votre commande !", "Confirmation", MessageBoxButtons.OK)
-
-
-                If result = DialogResult.OK Then
-                    CommandeActuelle = New Commande()
-                    ChangerEtat(EtatCommande.SelectionModeLivraison)
-
-                End If
+                RendConfirmation()
         End Select
     End Sub
 
+    Private Sub UpdateEtatSelectionPizza()
 
+        If CommandeActuelle.getCommandSize > 0 Then
+            EtatSelectionPizzaActuel = EtatSelectionPizza.PanierRempli
+            RendPanierRempli()
+        Else
+            EtatSelectionPizzaActuel = EtatSelectionPizza.PanierVide
+            RendPanierVide()
+        End If
+    End Sub
 
 
 
@@ -119,19 +101,21 @@ Public Class Client
         End If
 
         ChangerEtat(EtatCommande.SelectionPizza)
+        UpdateEtatSelectionPizza()
 
     End Sub
 
     Private Sub btnSupprimer_Click(sender As Object, e As EventArgs) Handles btnSupprimer.Click
         If lstPanier.SelectedItem IsNot Nothing Then
             CommandeActuelle.SupprimerPizza(lstPanier.SelectedIndex)
-
             refreshPizzaList()
+            UpdateEtatSelectionPizza()
         End If
     End Sub
 
     Private Sub btnValiderPizzeria_Click(sender As Object, e As EventArgs) Handles btnValiderPizzeria.Click
         ChangerEtat(EtatCommande.SelectionPizza)
+        UpdateEtatSelectionPizza()
         CommandeActuelle.SetPizzeria(lstPizzerias.SelectedItem.ToString())
 
     End Sub
@@ -159,5 +143,49 @@ Public Class Client
     Private Sub refreshPizzaList()
         lstPanier.Items.Clear()
         lstPanier.Items.AddRange(CommandeActuelle.GetPizzas().ToArray())
+    End Sub
+
+    Private Sub RendSelectionModeLivraison()
+        LabelHeader.Text = "Choisissez le mode de livraison :"
+        SelectionModeLivraisonLayout.Visible = True
+        SelectionPizzeriaLayout.Visible = False
+        SelectionPizzaLayout.Visible = False
+        btnRetour.Visible = False
+    End Sub
+
+    Private Sub RendSelectionPizzeria()
+        LabelHeader.Text = "Sélectionnez une pizzeria :"
+        SelectionModeLivraisonLayout.Visible = False
+        SelectionPizzeriaLayout.Visible = True
+        SelectionPizzaLayout.Visible = False
+        btnRetour.Visible = True
+    End Sub
+
+    Private Sub RendSelectionPizza()
+        LabelHeader.Text = "Ajoutez des pizzas à votre panier :"
+        SelectionModeLivraisonLayout.Visible = False
+        SelectionPizzeriaLayout.Visible = False
+        SelectionPizzaLayout.Visible = True
+        btnRetour.Visible = True
+        UpdateEtatSelectionPizza()
+    End Sub
+
+    Private Sub RendConfirmation()
+        LabelHeader.Text = "Commande confirmée !"
+        Dim result As DialogResult = MessageBox.Show("Merci pour votre commande !", "Confirmation", MessageBoxButtons.OK)
+        If result = DialogResult.OK Then
+            CommandeActuelle = New Commande()
+            ChangerEtat(EtatCommande.SelectionModeLivraison)
+
+        End If
+    End Sub
+
+
+    Private Sub RendPanierVide()
+        btnValiderCommande.Visible = False
+    End Sub
+
+    Private Sub RendPanierRempli()
+        btnValiderCommande.Visible = True
     End Sub
 End Class
