@@ -1,5 +1,11 @@
-﻿Public Class Client
+﻿Imports System.Globalization
+Imports System.Text
+Imports Pizza.Commande
+Public Class Client
     Inherits Form
+    Public Event commandeValidee(commande As Commande)
+
+
 
     ' Définition des états
     Private Enum EtatCommande
@@ -10,214 +16,138 @@
     End Enum
 
     Private Enum EtatSelectionPizza
-        AjoutPizza
         PanierVide
         PanierRempli
     End Enum
 
-    Private EtatActuel As EtatCommande
-
+    Private EtatActuel As EtatCommande = EtatCommande.SelectionModeLivraison
+    Private CommandeActuelle As Commande = New Commande()
     Private EtatSelectionPizzaActuel As EtatSelectionPizza
 
-    Private lblTitle As Label
-    Private lstPizzerias As ListBox
-    Private lstPizzas As ListBox
-    Private lstPanier As ListBox
-    Private btnAjouter As Button
-    Private btnSupprimer As Button
-    Private btnRecup As Button
+
     Private btnEmporter As Button
     Private btnLivraison As Button
-    Private btnValiderPizzeria As Button
-    Private btnRetour As Button
 
-    Private panier As New List(Of String)
 
     Private Sub Client_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        ' Configuration du formulaire
-        Me.Text = "Client - Sélection de Pizza"
-        Me.Size = New Drawing.Size(350, 400)
-        Me.StartPosition = FormStartPosition.CenterScreen
-
-        ' Label
-        lblTitle = New Label()
-        lblTitle.Location = New Drawing.Point(10, 10)
-        Me.Controls.Add(lblTitle)
-
-        ' Boutons de sélection du mode de livraison
-        btnEmporter = New Button()
-        btnEmporter.Text = "À emporter"
-        btnEmporter.Location = New Drawing.Point(10, 40)
-        AddHandler btnEmporter.Click, AddressOf Me.ModeLivraison_Selected
-        Me.Controls.Add(btnEmporter)
-
-        btnLivraison = New Button()
-        btnLivraison.Text = "Livraison"
-        btnLivraison.Location = New Drawing.Point(150, 40)
-        AddHandler btnLivraison.Click, AddressOf Me.ModeLivraison_Selected
-        Me.Controls.Add(btnLivraison)
-
-        ' Liste des pizzerias
-        lstPizzerias = New ListBox()
-        lstPizzerias.Items.AddRange(New String() {"Pizzeria A", "Pizzeria B", "Pizzeria C"})
-        lstPizzerias.Location = New Drawing.Point(10, 80)
-        lstPizzerias.Size = New Drawing.Size(260, 100)
-        Me.Controls.Add(lstPizzerias)
-
-        btnValiderPizzeria = New Button()
-        btnValiderPizzeria.Text = "Valider Pizzeria"
-        btnValiderPizzeria.Location = New Drawing.Point(10, 190)
-        AddHandler btnValiderPizzeria.Click, AddressOf Me.Pizzeria_Selectionnee
-        Me.Controls.Add(btnValiderPizzeria)
-
-        ' Liste des pizzas
-        lstPizzas = New ListBox()
-        lstPizzas.Items.AddRange(New String() {"Margherita", "Pepperoni", "4 Fromages", "Végétarienne", "Hawaïenne"})
-        lstPizzas.Location = New Drawing.Point(10, 80)
-        lstPizzas.Size = New Drawing.Size(150, 100)
-        Me.Controls.Add(lstPizzas)
-
-        ' Liste du panier
-        lstPanier = New ListBox()
-        lstPanier.Location = New Drawing.Point(180, 80)
-        lstPanier.Size = New Drawing.Size(150, 100)
-        Me.Controls.Add(lstPanier)
-
-        ' Boutons pour gérer le panier
-        btnAjouter = New Button()
-        btnAjouter.Text = "Ajouter"
-        btnAjouter.Location = New Drawing.Point(10, 190)
-        AddHandler btnAjouter.Click, AddressOf Me.Ajouter_Pizza
-        Me.Controls.Add(btnAjouter)
-
-        btnSupprimer = New Button()
-        btnSupprimer.Text = "Supprimer"
-        btnSupprimer.Location = New Drawing.Point(180, 190)
-        AddHandler btnSupprimer.Click, AddressOf Me.Supprimer_Pizza
-        Me.Controls.Add(btnSupprimer)
-
-        ' Bouton récupération
-        btnRecup = New Button()
-        btnRecup.Text = "Valider la commande"
-        btnRecup.Location = New Drawing.Point(300, 300)
-        btnRecup.Enabled = False ' Désactivé par défaut
-        AddHandler btnRecup.Click, AddressOf Me.Valid_Click
-        Me.Controls.Add(btnRecup)
-
-        ' Bouton retour
-        btnRetour = New Button()
-        btnRetour.Text = "Retour"
-        btnRetour.Location = New Drawing.Point(180, 300)
-        AddHandler btnRetour.Click, AddressOf Me.Retour_Click
-        Me.Controls.Add(btnRetour)
 
         ' Initialisation de l'état
         ChangerEtat(EtatCommande.SelectionModeLivraison)
     End Sub
 
+    Private Sub Init()
+
+
+    End Sub
     ' Changement d'état de la machine
     Private Sub ChangerEtat(nouvelEtat As EtatCommande)
         EtatActuel = nouvelEtat
 
         Select Case EtatActuel
             Case EtatCommande.SelectionModeLivraison
-                lblTitle.Text = "Choisissez le mode de livraison :"
-                btnEmporter.Visible = True
-                btnLivraison.Visible = True
-                lstPizzerias.Visible = False
-                btnValiderPizzeria.Visible = False
-                lstPizzas.Visible = False
-                lstPanier.Visible = False
-                btnAjouter.Visible = False
-                btnSupprimer.Visible = False
-                btnRecup.Visible = False
+                LabelHeader.Text = "Choisissez le mode de livraison :"
+                SelectionModeLivraisonLayout.Visible = True
+                SelectionPizzeriaLayout.Visible = False
+                SelectionPizzaLayout.Visible = False
+
                 btnRetour.Visible = False
 
             Case EtatCommande.SelectionPizzeria
-                lblTitle.Text = "Sélectionnez une pizzeria :"
-                btnEmporter.Visible = False
-                btnLivraison.Visible = False
-                lstPizzerias.Visible = True
-                btnValiderPizzeria.Visible = True
-                lstPizzas.Visible = False
-                lstPanier.Visible = False
-                btnAjouter.Visible = False
-                btnSupprimer.Visible = False
-                btnRecup.Visible = False
+                LabelHeader.Text = "Sélectionnez une pizzeria :"
+                SelectionModeLivraisonLayout.Visible = False
+                SelectionPizzeriaLayout.Visible = True
+                SelectionPizzaLayout.Visible = False
+
+
                 btnRetour.Visible = True
 
             Case EtatCommande.SelectionPizza
-                lblTitle.Text = "Ajoutez des pizzas à votre panier :"
-                btnEmporter.Visible = False
-                btnLivraison.Visible = False
-                lstPizzerias.Visible = False
-                btnValiderPizzeria.Visible = False
-                lstPizzas.Visible = True
-                lstPanier.Visible = True
-                btnAjouter.Visible = True
-                btnSupprimer.Visible = True
-                btnRecup.Visible = panier.Count > 0
+                LabelHeader.Text = "Ajoutez des pizzas à votre panier :"
+                SelectionModeLivraisonLayout.Visible = False
+                SelectionPizzeriaLayout.Visible = False
+                SelectionPizzaLayout.Visible = True
+
+
+                btnValiderCommande.Visible = CommandeActuelle.getCommandSize > 0
                 btnRetour.Visible = True
                 EtatSelectionPizzaActuel = EtatSelectionPizza.PanierVide
 
             Case EtatCommande.Confirmation
-                lblTitle.Text = "Commande confirmée !"
-                MessageBox.Show("Merci pour votre commande !", "Confirmation")
+                LabelHeader.Text = "Commande confirmée !"
+                Dim result As DialogResult = MessageBox.Show("Merci pour votre commande !", "Confirmation", MessageBoxButtons.OK)
+
+
+                If result = DialogResult.OK Then
+                    CommandeActuelle = New Commande()
+                    ChangerEtat(EtatCommande.SelectionModeLivraison)
+
+                End If
         End Select
     End Sub
 
-    ' Sélection du mode de livraison
-    Private Sub ModeLivraison_Selected(sender As Object, e As EventArgs)
-        ChangerEtat(EtatCommande.SelectionPizzeria)
+
+
+
+
+
+
+    Private Sub LivraisonImage_Click(sender As Object, e As EventArgs) Handles LivraisonImage.Click
+        Select Case EtatActuel
+            Case EtatCommande.SelectionModeLivraison
+                ChangerEtat(EtatCommande.SelectionPizzeria)
+                CommandeActuelle.SetTypeDeLivraison("Livraison")
+
+
+        End Select
     End Sub
 
-    ' Sélection de la pizzeria
-    Private Sub Pizzeria_Selectionnee(sender As Object, e As EventArgs)
-        If lstPizzerias.SelectedItem IsNot Nothing Then
-            ChangerEtat(EtatCommande.SelectionPizza)
-        Else
-            MessageBox.Show("Veuillez sélectionner une pizzeria.", "Erreur")
-        End If
+    Private Sub EmporterImage_Click(sender As Object, e As EventArgs) Handles EmporterImage.Click
+        Select Case EtatActuel
+            Case EtatCommande.SelectionModeLivraison
+                ChangerEtat(EtatCommande.SelectionPizzeria)
+                CommandeActuelle.SetTypeDeLivraison("A emporter")
+
+
+        End Select
     End Sub
 
-    ' Ajouter une pizza au panier
-    Private Sub Ajouter_Pizza(sender As Object, e As EventArgs)
+    Private Sub btnAjouter_Click(sender As Object, e As EventArgs) Handles btnAjouter.Click
         If lstPizzas.SelectedItem IsNot Nothing Then
-            panier.Add(lstPizzas.SelectedItem.ToString())
-            lstPanier.Items.Add(lstPizzas.SelectedItem.ToString())
-            btnRecup.Enabled = True
-            EtatSelectionPizzaActuel = EtatSelectionPizza.PanierRempli
+            CommandeActuelle.AjouterPizza(lstPizzas.SelectedItem.ToString())
+            lstPanier.Items.Clear()
+            lstPanier.Items.AddRange(CommandeActuelle.GetPizzas().ToArray())
         End If
+
+        ChangerEtat(EtatCommande.SelectionPizza)
+
     End Sub
 
-    ' Supprimer une pizza du panier
-    Private Sub Supprimer_Pizza(sender As Object, e As EventArgs)
+    Private Sub btnSupprimer_Click(sender As Object, e As EventArgs) Handles btnSupprimer.Click
         If lstPanier.SelectedItem IsNot Nothing Then
-            panier.Remove(lstPanier.SelectedItem.ToString())
-            lstPanier.Items.Remove(lstPanier.SelectedItem)
+            CommandeActuelle.SupprimerPizza(lstPanier.SelectedIndex)
 
-            If panier.Count > 0 Then
-                btnRecup.Enabled = True
-            Else
-                EtatSelectionPizzaActuel = EtatSelectionPizza.PanierVide
-                btnRecup.Enabled = False
-            End If
+            refreshPizzaList()
         End If
     End Sub
 
-    ' Validation de la commande
-    Private Sub Valid_Click(sender As Object, e As EventArgs)
-        If lstPizzas.SelectedItem IsNot Nothing Then
-            MessageBox.Show("Vous avez sélectionné : " & lstPizzas.SelectedItem.ToString, "Confirmation")
-            ChangerEtat(EtatCommande.Confirmation)
-        Else
-            MessageBox.Show("Veuillez sélectionner une pizza.", "Erreur")
-        End If
+    Private Sub btnValiderPizzeria_Click(sender As Object, e As EventArgs) Handles btnValiderPizzeria.Click
+        ChangerEtat(EtatCommande.SelectionPizza)
+        CommandeActuelle.SetPizzeria(lstPizzerias.SelectedItem.ToString())
+
     End Sub
 
-    ' Bouton retour
-    ' Retour à l'étape précédente
-    Private Sub Retour_Click(sender As Object, e As EventArgs)
+    Private Sub btnValiderCommande_Click(sender As Object, e As EventArgs) Handles btnValiderCommande.Click
+        MessageBox.Show("Vous avez sélectionné : " & CommandeActuelle.AfficherCommande(), "Confirmation")
+        RaiseEvent commandeValidee(CommandeActuelle)
+        ChangerEtat(EtatCommande.Confirmation)
+
+
+
+    End Sub
+
+    Private Sub btnRetour_Click(sender As Object, e As EventArgs) Handles btnRetour.Click
+        Debug.WriteLine("Etat actuelle" + EtatActuel.ToString())
+
         Select Case EtatActuel
             Case EtatCommande.SelectionPizzeria
                 ChangerEtat(EtatCommande.SelectionModeLivraison)
@@ -226,4 +156,8 @@
         End Select
     End Sub
 
+    Private Sub refreshPizzaList()
+        lstPanier.Items.Clear()
+        lstPanier.Items.AddRange(CommandeActuelle.GetPizzas().ToArray())
+    End Sub
 End Class
