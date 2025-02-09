@@ -54,9 +54,10 @@ Partial Class Client
         ' LabelHeader
         ' 
         LabelHeader.AutoSize = True
-        LabelHeader.Location = New Point(188, 43)
+        LabelHeader.Location = New Point(132, 26)
+        LabelHeader.Margin = New Padding(2, 0, 2, 0)
         LabelHeader.Name = "LabelHeader"
-        LabelHeader.Size = New Size(238, 25)
+        LabelHeader.Size = New Size(158, 15)
         LabelHeader.TabIndex = 0
         LabelHeader.Text = "Choisir un mode de livraison"
         ' 
@@ -64,8 +65,10 @@ Partial Class Client
         ' 
         LivraisonImage.BackgroundImage = My.Resources.Resources._4988376_livraison_de_pizza_avec_logo_scooter_gratuit_vectoriel
         LivraisonImage.BackgroundImageLayout = ImageLayout.Stretch
+        LivraisonImage.Enabled = False
         LivraisonImage.InitialImage = My.Resources.Resources._4988376_livraison_de_pizza_avec_logo_scooter_gratuit_vectoriel
-        LivraisonImage.Location = New Point(3, 3)
+        LivraisonImage.Location = New Point(2, 2)
+        LivraisonImage.Margin = New Padding(2)
         LivraisonImage.Name = "LivraisonImage"
         LivraisonImage.Size = New Size(176, 140)
         LivraisonImage.SizeMode = PictureBoxSizeMode.AutoSize
@@ -77,7 +80,8 @@ Partial Class Client
         EmporterImage.BackgroundImage = My.Resources.Resources.Restaurant_pizzeria_à_Péron_La_Baronessa20
         EmporterImage.BackgroundImageLayout = ImageLayout.Stretch
         EmporterImage.InitialImage = My.Resources.Resources.Restaurant_pizzeria_à_Péron_La_Baronessa20
-        EmporterImage.Location = New Point(3, 3)
+        EmporterImage.Location = New Point(2, 2)
+        EmporterImage.Margin = New Padding(2)
         EmporterImage.Name = "EmporterImage"
         EmporterImage.Size = New Size(176, 140)
         EmporterImage.SizeMode = PictureBoxSizeMode.AutoSize
@@ -87,9 +91,10 @@ Partial Class Client
         ' LabelEmporter
         ' 
         LabelEmporter.AutoSize = True
-        LabelEmporter.Location = New Point(3, 146)
+        LabelEmporter.Location = New Point(2, 144)
+        LabelEmporter.Margin = New Padding(2, 0, 2, 0)
         LabelEmporter.Name = "LabelEmporter"
-        LabelEmporter.Size = New Size(86, 25)
+        LabelEmporter.Size = New Size(56, 15)
         LabelEmporter.TabIndex = 3
         LabelEmporter.Text = "Emporter"
         ' 
@@ -97,11 +102,13 @@ Partial Class Client
         ' 
         LabelLivraison.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
         LabelLivraison.AutoSize = True
-        LabelLivraison.Location = New Point(3, 146)
+        LabelLivraison.Enabled = False
+        LabelLivraison.Location = New Point(2, 144)
+        LabelLivraison.Margin = New Padding(2, 0, 2, 0)
         LabelLivraison.Name = "LabelLivraison"
-        LabelLivraison.Size = New Size(176, 25)
+        LabelLivraison.Size = New Size(176, 15)
         LabelLivraison.TabIndex = 4
-        LabelLivraison.Text = "Livraison"
+        LabelLivraison.Text = "Livraison (Pas implémenté)"
         ' 
         ' LivraisonLayout
         ' 
@@ -110,9 +117,10 @@ Partial Class Client
         LivraisonLayout.Controls.Add(LivraisonImage)
         LivraisonLayout.Controls.Add(LabelLivraison)
         LivraisonLayout.FlowDirection = FlowDirection.TopDown
-        LivraisonLayout.Location = New Point(3, 3)
+        LivraisonLayout.Location = New Point(2, 2)
+        LivraisonLayout.Margin = New Padding(2)
         LivraisonLayout.Name = "LivraisonLayout"
-        LivraisonLayout.Size = New Size(182, 171)
+        LivraisonLayout.Size = New Size(180, 159)
         LivraisonLayout.TabIndex = 5
         ' 
         ' FlowLayoutPanel2
@@ -122,9 +130,10 @@ Partial Class Client
         FlowLayoutPanel2.Controls.Add(EmporterImage)
         FlowLayoutPanel2.Controls.Add(LabelEmporter)
         FlowLayoutPanel2.FlowDirection = FlowDirection.TopDown
-        FlowLayoutPanel2.Location = New Point(191, 3)
+        FlowLayoutPanel2.Location = New Point(186, 2)
+        FlowLayoutPanel2.Margin = New Padding(2)
         FlowLayoutPanel2.Name = "FlowLayoutPanel2"
-        FlowLayoutPanel2.Size = New Size(182, 171)
+        FlowLayoutPanel2.Size = New Size(180, 159)
         FlowLayoutPanel2.TabIndex = 6
         ' 
         ' SelectionModeLivraisonLayout
@@ -133,10 +142,10 @@ Partial Class Client
         SelectionModeLivraisonLayout.AutoSizeMode = AutoSizeMode.GrowAndShrink
         SelectionModeLivraisonLayout.Controls.Add(LivraisonLayout)
         SelectionModeLivraisonLayout.Controls.Add(FlowLayoutPanel2)
-        SelectionModeLivraisonLayout.Location = New Point(107, 126)
-        SelectionModeLivraisonLayout.Margin = New Padding(3, 10, 10, 3)
+        SelectionModeLivraisonLayout.Location = New Point(75, 76)
+        SelectionModeLivraisonLayout.Margin = New Padding(2, 6, 7, 2)
         SelectionModeLivraisonLayout.Name = "SelectionModeLivraisonLayout"
-        SelectionModeLivraisonLayout.Size = New Size(376, 177)
+        SelectionModeLivraisonLayout.Size = New Size(368, 163)
         SelectionModeLivraisonLayout.TabIndex = 7
         ' 
         ' SelectionPizzeriaLayout
@@ -146,27 +155,30 @@ Partial Class Client
         SelectionPizzeriaLayout.Controls.Add(lstPizzerias)
         SelectionPizzeriaLayout.Controls.Add(btnValiderPizzeria)
         SelectionPizzeriaLayout.FlowDirection = FlowDirection.TopDown
-        SelectionPizzeriaLayout.Location = New Point(219, 125)
+        SelectionPizzeriaLayout.Location = New Point(153, 75)
+        SelectionPizzeriaLayout.Margin = New Padding(2)
         SelectionPizzeriaLayout.Name = "SelectionPizzeriaLayout"
-        SelectionPizzeriaLayout.Size = New Size(186, 175)
+        SelectionPizzeriaLayout.Size = New Size(131, 107)
         SelectionPizzeriaLayout.TabIndex = 8
         ' 
         ' lstPizzerias
         ' 
         lstPizzerias.FormattingEnabled = True
-        lstPizzerias.ItemHeight = 25
+        lstPizzerias.ItemHeight = 15
         lstPizzerias.Items.AddRange(New Object() {"Pizzeria A", "Pizzeria B", "Pizzeria C"})
-        lstPizzerias.Location = New Point(3, 3)
+        lstPizzerias.Location = New Point(2, 2)
+        lstPizzerias.Margin = New Padding(2)
         lstPizzerias.Name = "lstPizzerias"
-        lstPizzerias.Size = New Size(180, 129)
+        lstPizzerias.Size = New Size(127, 79)
         lstPizzerias.TabIndex = 0
         ' 
         ' btnValiderPizzeria
         ' 
         btnValiderPizzeria.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btnValiderPizzeria.Location = New Point(71, 138)
+        btnValiderPizzeria.Location = New Point(51, 85)
+        btnValiderPizzeria.Margin = New Padding(2)
         btnValiderPizzeria.Name = "btnValiderPizzeria"
-        btnValiderPizzeria.Size = New Size(112, 34)
+        btnValiderPizzeria.Size = New Size(78, 20)
         btnValiderPizzeria.TabIndex = 1
         btnValiderPizzeria.Text = "Valider"
         btnValiderPizzeria.TextAlign = ContentAlignment.BottomRight
@@ -174,9 +186,10 @@ Partial Class Client
         ' 
         ' btnRetour
         ' 
-        btnRetour.Location = New Point(59, 400)
+        btnRetour.Location = New Point(41, 240)
+        btnRetour.Margin = New Padding(2)
         btnRetour.Name = "btnRetour"
-        btnRetour.Size = New Size(112, 34)
+        btnRetour.Size = New Size(78, 20)
         btnRetour.TabIndex = 9
         btnRetour.Text = "Retour"
         btnRetour.UseVisualStyleBackColor = True
@@ -188,28 +201,31 @@ Partial Class Client
         SelectionPizzaLayout.Controls.Add(lstPizzas)
         SelectionPizzaLayout.Controls.Add(lstPanier)
         SelectionPizzaLayout.Controls.Add(FlowLayoutPanel1)
-        SelectionPizzaLayout.Location = New Point(105, 137)
+        SelectionPizzaLayout.Location = New Point(74, 82)
+        SelectionPizzaLayout.Margin = New Padding(2)
         SelectionPizzaLayout.Name = "SelectionPizzaLayout"
-        SelectionPizzaLayout.Size = New Size(496, 135)
+        SelectionPizzaLayout.Size = New Size(348, 83)
         SelectionPizzaLayout.TabIndex = 10
         ' 
         ' lstPizzas
         ' 
         lstPizzas.FormattingEnabled = True
-        lstPizzas.ItemHeight = 25
+        lstPizzas.ItemHeight = 15
         lstPizzas.Items.AddRange(New Object() {"Margherita", "Pepperoni", "4 Fromages", "Végétarienne", "Hawaïenne"})
-        lstPizzas.Location = New Point(3, 3)
+        lstPizzas.Location = New Point(2, 2)
+        lstPizzas.Margin = New Padding(2)
         lstPizzas.Name = "lstPizzas"
-        lstPizzas.Size = New Size(180, 129)
+        lstPizzas.Size = New Size(127, 79)
         lstPizzas.TabIndex = 0
         ' 
         ' lstPanier
         ' 
         lstPanier.FormattingEnabled = True
-        lstPanier.ItemHeight = 25
-        lstPanier.Location = New Point(189, 3)
+        lstPanier.ItemHeight = 15
+        lstPanier.Location = New Point(133, 2)
+        lstPanier.Margin = New Padding(2)
         lstPanier.Name = "lstPanier"
-        lstPanier.Size = New Size(180, 129)
+        lstPanier.Size = New Size(127, 79)
         lstPanier.TabIndex = 1
         ' 
         ' FlowLayoutPanel1
@@ -220,50 +236,53 @@ Partial Class Client
         FlowLayoutPanel1.Controls.Add(btnSupprimer)
         FlowLayoutPanel1.Controls.Add(btnValiderCommande)
         FlowLayoutPanel1.FlowDirection = FlowDirection.TopDown
-        FlowLayoutPanel1.Location = New Point(375, 3)
+        FlowLayoutPanel1.Location = New Point(264, 2)
+        FlowLayoutPanel1.Margin = New Padding(2)
         FlowLayoutPanel1.Name = "FlowLayoutPanel1"
-        FlowLayoutPanel1.Size = New Size(118, 120)
+        FlowLayoutPanel1.Size = New Size(82, 72)
         FlowLayoutPanel1.TabIndex = 4
         ' 
         ' btnAjouter
         ' 
-        btnAjouter.Location = New Point(3, 3)
+        btnAjouter.Location = New Point(2, 2)
+        btnAjouter.Margin = New Padding(2)
         btnAjouter.Name = "btnAjouter"
-        btnAjouter.Size = New Size(112, 34)
+        btnAjouter.Size = New Size(78, 20)
         btnAjouter.TabIndex = 2
         btnAjouter.Text = "Ajouter"
         btnAjouter.UseVisualStyleBackColor = True
         ' 
         ' btnSupprimer
         ' 
-        btnSupprimer.Location = New Point(3, 43)
+        btnSupprimer.Location = New Point(2, 26)
+        btnSupprimer.Margin = New Padding(2)
         btnSupprimer.Name = "btnSupprimer"
-        btnSupprimer.Size = New Size(112, 34)
+        btnSupprimer.Size = New Size(78, 20)
         btnSupprimer.TabIndex = 3
         btnSupprimer.Text = "Supprimer"
         btnSupprimer.UseVisualStyleBackColor = True
         ' 
         ' btnValiderCommande
         ' 
-        btnValiderCommande.Location = New Point(3, 83)
+        btnValiderCommande.Location = New Point(2, 50)
+        btnValiderCommande.Margin = New Padding(2)
         btnValiderCommande.Name = "btnValiderCommande"
-        btnValiderCommande.Size = New Size(112, 34)
+        btnValiderCommande.Size = New Size(78, 20)
         btnValiderCommande.TabIndex = 5
         btnValiderCommande.Text = "Valider"
         btnValiderCommande.UseVisualStyleBackColor = True
         ' 
         ' Client
         ' 
-        AutoScaleDimensions = New SizeF(10.0F, 25.0F)
+        AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         AutoSize = True
-        ClientSize = New Size(687, 750)
+        ClientSize = New Size(481, 450)
         Controls.Add(SelectionPizzaLayout)
         Controls.Add(btnRetour)
         Controls.Add(SelectionModeLivraisonLayout)
         Controls.Add(LabelHeader)
         Controls.Add(SelectionPizzeriaLayout)
-        Margin = New Padding(4, 5, 4, 5)
         Name = "Client"
         StartPosition = FormStartPosition.Manual
         Text = "Client"

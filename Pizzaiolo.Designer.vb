@@ -34,7 +34,7 @@ Partial Class Pizzaiolo
         lstCommandes.FullRowSelect = True
         lstCommandes.Location = New Point(10, 10)
         lstCommandes.Name = "lstCommandes"
-        lstCommandes.Size = New Size(460, 250)
+        lstCommandes.Size = New Size(660, 250)
         lstCommandes.TabIndex = 0
         lstCommandes.UseCompatibleStateImageBehavior = False
         lstCommandes.View = View.Details
@@ -42,7 +42,7 @@ Partial Class Pizzaiolo
         ' Commande
         ' 
         Commande.Text = "Commande"
-        Commande.Width = 350
+        Commande.Width = 550
         ' 
         ' Statut
         ' 
