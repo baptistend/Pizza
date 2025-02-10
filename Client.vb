@@ -122,8 +122,11 @@ Public Class Client
 
     Private Sub btnValiderCommande_Click(sender As Object, e As EventArgs) Handles btnValiderCommande.Click
         MessageBox.Show("Vous avez sélectionné : " & CommandeActuelle.AfficherCommande(), "Confirmation")
+
         RaiseEvent commandeValidee(CommandeActuelle)
         ChangerEtat(EtatCommande.Confirmation)
+        CommandeActuelle = New Commande()
+        refreshPizzaList()
 
 
 
@@ -136,6 +139,7 @@ Public Class Client
             Case EtatCommande.SelectionPizzeria
                 ChangerEtat(EtatCommande.SelectionModeLivraison)
             Case EtatCommande.SelectionPizza
+
                 ChangerEtat(EtatCommande.SelectionPizzeria)
         End Select
     End Sub
