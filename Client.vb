@@ -11,18 +11,15 @@ Public Class Client
     Private Enum EtatCommande
         SelectionModeLivraison
         SelectionPizzeria
-        SelectionPizza
+        SelectionPizzaPanierVide
+        SelectionPizzaPanierRempli
         Confirmation
     End Enum
 
-    Private Enum EtatSelectionPizza
-        PanierVide
-        PanierRempli
-    End Enum
+
 
     Private EtatActuel As EtatCommande = EtatCommande.SelectionModeLivraison
     Private CommandeActuelle As Commande = New Commande()
-    Private EtatSelectionPizzaActuel As EtatSelectionPizza
 
 
     Private btnEmporter As Button
@@ -50,7 +47,11 @@ Public Class Client
             Case EtatCommande.SelectionPizzeria
                 RendSelectionPizzeria()
 
-            Case EtatCommande.SelectionPizza
+            Case EtatCommande.SelectionPizzaPanierRempli
+
+                RendSelectionPizza()
+            Case EtatCommande.SelectionPizzaPanierVide
+
                 RendSelectionPizza()
 
             Case EtatCommande.Confirmation
@@ -61,10 +62,10 @@ Public Class Client
     Private Sub UpdateEtatSelectionPizza()
 
         If CommandeActuelle.getCommandSize > 0 Then
-            EtatSelectionPizzaActuel = EtatSelectionPizza.PanierRempli
+            EtatActuel = EtatCommande.SelectionPizzaPanierRempli
             RendPanierRempli()
         Else
-            EtatSelectionPizzaActuel = EtatSelectionPizza.PanierVide
+            EtatActuel = EtatCommande.SelectionPizzaPanierVide
             RendPanierVide()
         End If
     End Sub
@@ -100,7 +101,6 @@ Public Class Client
             lstPanier.Items.AddRange(CommandeActuelle.GetPizzas().ToArray())
         End If
 
-        ChangerEtat(EtatCommande.SelectionPizza)
         UpdateEtatSelectionPizza()
 
     End Sub
@@ -114,9 +114,13 @@ Public Class Client
     End Sub
 
     Private Sub btnValiderPizzeria_Click(sender As Object, e As EventArgs) Handles btnValiderPizzeria.Click
-        ChangerEtat(EtatCommande.SelectionPizza)
+
         UpdateEtatSelectionPizza()
+        RendSelectionPizza()
+
         CommandeActuelle.SetPizzeria(lstPizzerias.SelectedItem.ToString())
+
+
 
     End Sub
 
@@ -138,9 +142,12 @@ Public Class Client
         Select Case EtatActuel
             Case EtatCommande.SelectionPizzeria
                 ChangerEtat(EtatCommande.SelectionModeLivraison)
-            Case EtatCommande.SelectionPizza
+            Case EtatCommande.SelectionPizzaPanierRempli
+                RendSelectionPizzeria()
 
-                ChangerEtat(EtatCommande.SelectionPizzeria)
+            Case EtatCommande.SelectionPizzaPanierVide
+                RendSelectionPizzeria()
+
         End Select
     End Sub
 
@@ -158,6 +165,7 @@ Public Class Client
     End Sub
 
     Private Sub RendSelectionPizzeria()
+        btnValiderCommande.Enabled = False
         LabelHeader.Text = "Sélectionnez une pizzeria :"
         SelectionModeLivraisonLayout.Visible = False
         SelectionPizzeriaLayout.Visible = True
@@ -166,12 +174,13 @@ Public Class Client
     End Sub
 
     Private Sub RendSelectionPizza()
+        UpdateEtatSelectionPizza()
+
         LabelHeader.Text = "Ajoutez des pizzas à votre panier :"
         SelectionModeLivraisonLayout.Visible = False
         SelectionPizzeriaLayout.Visible = False
         SelectionPizzaLayout.Visible = True
         btnRetour.Visible = True
-        UpdateEtatSelectionPizza()
     End Sub
 
     Private Sub RendConfirmation()
@@ -186,10 +195,10 @@ Public Class Client
 
 
     Private Sub RendPanierVide()
-        btnValiderCommande.Visible = False
+        btnValiderCommande.Enabled = False
     End Sub
 
     Private Sub RendPanierRempli()
-        btnValiderCommande.Visible = True
+        btnValiderCommande.Enabled = True
     End Sub
 End Class
